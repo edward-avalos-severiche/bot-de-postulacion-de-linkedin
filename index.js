@@ -76,15 +76,18 @@ async function Login() {
 }
 
 async function initiliazer() {
-  browser = await puppeteer.launch({
+  const launchOptions = {
+    // Puppeteer descargará y usará su propio Chromium cuando ChromePath esté vacío.
     headless: false,
-    executablePath: browserPath,
     args: [resolution],
     defaultViewport: null,
-    //userDataDir: "./userData",
-    //uncomment userDataDir line  if you want to store your session and remove login() from main()
-    // and change the baseURL to https://www.linkedin.com/feed
-  })
+  }
+
+  if (browserPath) {
+    launchOptions.executablePath = browserPath
+  }
+
+  browser = await puppeteer.launch(launchOptions)
   page = await browser.newPage()
 
   page.on("console", (msg) => {
